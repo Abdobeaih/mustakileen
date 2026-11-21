@@ -496,7 +496,7 @@ function seedData() {
         address: 'شارع الهرم، المعادي، القاهرة',
         phone: '0223567890',
         rating: 4.3,
-        img_url: 'https://images.unsplash.com/photo-1587351021759-3772687fe598?w=400&auto=format&fit=crop',
+        img_url: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400&auto=format&fit=crop',
         description: 'مركز طبي شامل مع عيادات تخصصية وخدمات علاج طبيعي متطورة.',
         services_offered: ['كشف عام', 'علاج طبيعي', 'أشعة', 'تحاليل', 'قلب'],
         pricing: [
@@ -875,7 +875,7 @@ function seedData() {
       {
         id: 'ENT-003', name: 'نادي وادي دجلة', category: 'club', governorate: 'القاهرة',
         discount_percent: '30%', rating: 4.6,
-        img_url: 'https://images.unsplash.com/photo-1574629810360-3ef0c64a6f38?w=400&auto=format&fit=crop',
+        img_url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&auto=format&fit=crop',
         description: 'نادي اجتماعي ورياضي راقي يضم ملاعب ومطاعم ومنطقة أطفال.',
       },
       {
@@ -911,7 +911,7 @@ function seedData() {
       {
         id: 'ENT-009', name: 'رحلة الأقصر وأسوان', category: 'trip', governorate: 'الأقصر',
         discount_percent: '25%', rating: 4.9,
-        img_url: 'https://images.unsplash.com/photo-1590767728695-7c29c0b3eaa5?w=400&auto=format&fit=crop',
+        img_url: 'https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=400&auto=format&fit=crop',
         description: 'رحلة سياحية متكاملة لزيارة معابد الأقصر وأسوان مع مرشد سياحي.',
       },
       {
@@ -929,7 +929,7 @@ function seedData() {
       {
         id: 'ENT-012', name: 'فاميلي لاند', category: 'park', governorate: 'الإسكندرية',
         discount_percent: '40%', rating: 4.1,
-        img_url: 'https://images.unsplash.com/photo-1567580168208-34a2a623beaf?w=400&auto=format&fit=crop',
+        img_url: 'https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=400&auto=format&fit=crop',
         description: 'منتزه عائلي كبير بالعين السخنة مناسب للأطفال والكبار.',
       },
     ],
