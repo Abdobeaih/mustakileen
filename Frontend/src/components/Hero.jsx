@@ -55,9 +55,9 @@ const Hero = memo(function Hero() {
           >
             <div className="relative">
               <picture>
-              <source srcSet="/Hero-img.png" type="image/png" />
+              <source srcSet="/hero.jpg" type="image/jpeg" />
               <img 
-                src="/Hero-img.png" 
+                src="/hero.jpg" 
                 alt={t('hero', 'altText') || 'Freelancer Team'} 
                 width="800" height="500"
                 fetchpriority="high"
