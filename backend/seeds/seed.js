@@ -62,7 +62,11 @@ const seed = async () => {
     ])
     console.log(`Seeded ${branches.length} branches`)
 
-    const admin = await Admin.create({ name: 'مدير النظام', email: 'freelancer360.dev@gmail.com', password: 'Abdo$2782', role: 'SUPER_ADMIN' })
+    const { SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD } = process.env
+    if (!SEED_ADMIN_EMAIL || !SEED_ADMIN_PASSWORD) {
+      throw new Error('Set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD in .env before seeding')
+    }
+    const admin = await Admin.create({ name: 'مدير النظام', email: SEED_ADMIN_EMAIL, password: SEED_ADMIN_PASSWORD, role: 'SUPER_ADMIN' })
     console.log('Seeded admin')
 
     const govNames = ['القاهرة', 'الجيزة', 'الإسكندرية', 'الدقهلية', 'الشرقية', 'القليوبية', 'المنوفية', 'الغربية', 'كفر الشيخ', 'البحيرة', 'دمياط', 'بورسعيد', 'السويس', 'الأقصر', 'أسوان']
@@ -249,7 +253,7 @@ const seed = async () => {
     console.log('   Users: sara@test.com / Test1234 (premium)')
     console.log('   Users: khalid@test.com / Test1234 (free)')
     console.log('   Users: abdelraan.free@example.com / Test1234 (free)')
-    console.log('   Admin: freelancer360.dev@gmail.com / Abdo$2782')
+    console.log('   Admin: use SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD from your .env')
     console.log('   Companies: shifa@mustakleen.com / Company123')
     process.exit(0)
   } catch (error) {
