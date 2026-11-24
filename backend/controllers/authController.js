@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
       return res.json({
         success: true,
         data: {
-          user: { ...entity.toObject(), role: 'company' },
+          user: { ...entity.toObject(), password: undefined, role: 'company' },
           token: generateToken(entity._id),
           role: 'company',
         },
@@ -70,7 +70,7 @@ const login = async (req, res, next) => {
       return res.json({
         success: true,
         data: {
-          user: { ...entity.toObject(), role: 'admin' },
+          user: { ...entity.toObject(), password: undefined, role: 'admin' },
           token: generateToken(entity._id),
           role: 'admin',
         },
