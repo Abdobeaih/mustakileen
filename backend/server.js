@@ -32,6 +32,9 @@ connectDB()
 
 const app = express()
 
+// Behind a hosting proxy (Render): trust the first proxy so rate limiting sees the real client IP
+app.set('trust proxy', 1)
+
 // Security headers
 app.use(helmet())
 
@@ -39,8 +42,13 @@ app.use(helmet())
 app.use(compression())
 
 // CORS
+// CORS_ORIGIN may hold several origins separated by commas
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean)
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
   credentials: true,
 }))
 
@@ -102,7 +110,12 @@ app.get('/api/health', (req, res) => {
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+// On Vercel the platform runs the exported app as a serverless function, so we only listen elsewhere
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+}
+
+module.exports = app
