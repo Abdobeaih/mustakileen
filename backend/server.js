@@ -110,7 +110,12 @@ app.get('/api/health', (req, res) => {
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+// On Vercel the platform runs the exported app as a serverless function, so we only listen elsewhere
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+}
+
+module.exports = app
