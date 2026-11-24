@@ -27,16 +27,26 @@ const ensureAdmin = async () => {
   console.log('Admin account created from environment settings')
 }
 
-const connectDB = async () => {
-  try {
-    const { uri, options } = getConnection()
-    const conn = await mongoose.connect(uri, options)
-    console.log(`MongoDB connected: ${conn.connection.host}`)
-    await ensureAdmin()
-  } catch (error) {
-    console.error(`MongoDB connection error: ${error.message}`)
-    console.warn('Server will continue without database — db.js localStorage fallback will be used.')
+// Connect once, and retry on the next call when it failed. On a serverless host a single
+// failed attempt at start-up must not leave the instance without a database for good.
+let pending = null
+const connectDB = () => {
+  if (mongoose.connection.readyState === 1) return Promise.resolve()
+  if (!pending) {
+    pending = (async () => {
+      try {
+        const { uri, options } = getConnection()
+        const conn = await mongoose.connect(uri, { ...options, serverSelectionTimeoutMS: 8000 })
+        console.log(`MongoDB connected: ${conn.connection.host}`)
+        await ensureAdmin()
+      } catch (error) {
+        console.error(`MongoDB connection error: ${error.message}`)
+        console.warn('Server will continue without database — db.js localStorage fallback will be used.')
+        pending = null
+      }
+    })()
   }
+  return pending
 }
 
 module.exports = connectDB
