@@ -43,15 +43,22 @@ export function AuthProvider({ children }) {
       } else if (session.type === USER_ROLES.COMPANY) {
         const c = findCompanyById(session.id)
         if (c) setCompany(c)
-      } else if (session.type === USER_ROLES.ADMIN) {
-        const a = findAdminByEmail(session.email)
-        if (a) setAdmin(a)
+      } else if (session.type === USER_ROLES.ADMIN && session.token && session.admin) {
+        // Admin session comes from the backend. Restore it, then confirm the token is still valid.
+        setAdmin(session.admin)
+        api.get('/auth/me', { headers: { Authorization: `Bearer ${session.token}` }, timeout: 90000 })
+          .catch((err) => {
+            if (err.response?.status === 401) {
+              setAdmin(null)
+              clearSession()
+            }
+          })
       }
     }
     setLoading(false)
   }, [])
 
-  const login = useCallback((email, password) => {
+  const login = useCallback(async (email, password) => {
     // Try User first
     const u = findUser(email, password)
     if (u) {
@@ -70,15 +77,29 @@ export function AuthProvider({ children }) {
       saveSession({ type: USER_ROLES.COMPANY, id: c.id })
       return { success: true, company: c, role: 'company' }
     }
-    // Try Admin
-    const a = findAdmin(email, password)
-    if (a) {
-      setAdmin(a)
-      setUser(null)
-      setCompany(null)
-      saveSession({ type: USER_ROLES.ADMIN, email: a.email })
-      return { success: true, admin: a, role: 'admin' }
+    // Admin: checked by the backend. Skip it for emails that belong to a local user or company.
+    if (findUserByEmail(email) || findCompanyByEmail(email)) {
+      return { error: 'invalid_credentials' }
     }
+    try {
+      // Long timeout: the free backend host can take a while to wake up
+      const { data } = await api.post('/auth/login', { email, password }, { timeout: 90000 })
+      if (data?.success && data.data?.role === 'admin') {
+        const a = {
+          id: data.data.user._id || data.data.user.id,
+          name: data.data.user.name,
+          email: data.data.user.email,
+          role: 'SUPER_ADMIN',
+          isActive: data.data.user.isActive !== false,
+          join_date: data.data.user.createdAt,
+        }
+        setAdmin(a)
+        setUser(null)
+        setCompany(null)
+        saveSession({ type: USER_ROLES.ADMIN, email: a.email, admin: a, token: data.data.token })
+        return { success: true, admin: a, role: 'admin' }
+      }
+    } catch (_) { /* fall through to invalid credentials */ }
     return { error: 'invalid_credentials' }
   }, [])
 
@@ -124,7 +145,7 @@ export function AuthProvider({ children }) {
     let exists = false
     if (role === USER_ROLES.USER) exists = !!findUserByEmail(email)
     else if (role === USER_ROLES.COMPANY) exists = !!findCompanyByEmail(email)
-    else if (role === USER_ROLES.ADMIN) exists = !!findAdminByEmail(email)
+    else if (role === USER_ROLES.ADMIN) exists = true // admin accounts live in the backend; it answers for unknown emails
     if (!exists) return { error: 'البريد الإلكتروني غير مسجل' }
 
     setSendingOtp(true)
