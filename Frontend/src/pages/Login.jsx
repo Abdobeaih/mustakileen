@@ -16,10 +16,10 @@ export default function Login() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    const result = login(form.email, form.password)
+    const result = await login(form.email, form.password)
     if (result.success) {
       if (result.role === 'admin') navigate('/dashboard/admin')
       else if (result.role === 'company') navigate('/dashboard/company')
