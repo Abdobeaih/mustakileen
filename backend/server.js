@@ -32,6 +32,9 @@ connectDB()
 
 const app = express()
 
+// Behind a hosting proxy (Render): trust the first proxy so rate limiting sees the real client IP
+app.set('trust proxy', 1)
+
 // Security headers
 app.use(helmet())
 
@@ -39,8 +42,13 @@ app.use(helmet())
 app.use(compression())
 
 // CORS
+// CORS_ORIGIN may hold several origins separated by commas
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean)
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
   credentials: true,
 }))
 
