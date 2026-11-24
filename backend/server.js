@@ -83,6 +83,9 @@ if (process.env.NODE_ENV === 'production') {
 app.use(express.json({ limit: '100kb' }))
 app.use(express.urlencoded({ extended: true, limit: '100kb' }))
 
+// Make sure the database is connected before an API request runs (retries after a failed start-up)
+app.use('/api', (req, res, next) => { connectDB().then(() => next(), () => next()) })
+
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
