@@ -436,15 +436,6 @@ function seedData() {
       },
     ],
     admins: [
-      {
-        id: 'ADMIN-001',
-        name: 'مشرف النظام',
-        email: 'freelancer360.dev@gmail.com',
-        password: 'Abdo$2782',
-        role: 'SUPER_ADMIN',
-        isActive: true,
-        join_date: '2025-01-01T00:00:00.000Z',
-      },
     ],
     // Track which discounts each user has scanned (many-to-many via USERS scans)
     // Each scan now includes invoice/pricing details for the detailed view
