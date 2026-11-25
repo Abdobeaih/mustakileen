@@ -3,6 +3,7 @@ import ServiceDetail from '../../components/ServiceDetail'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import { servicesData } from '../../data/servicesData'
 import { getAllEntertainmentVenues } from '../../data/db'
+import { getEntertainmentVenues } from '../../services/venuesService'
 
 export default function Entertainment() {
   const [venues, setVenues] = useState([])
@@ -17,6 +18,9 @@ export default function Entertainment() {
     } finally {
       setLoading(false)
     }
+    let cancelled = false
+    getEntertainmentVenues().then((list) => { if (!cancelled) setVenues(list) }).catch(() => {})
+    return () => { cancelled = true }
   }, [])
 
   const service = servicesData['entertainment']

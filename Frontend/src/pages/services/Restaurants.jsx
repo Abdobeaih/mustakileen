@@ -11,6 +11,7 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import { useLanguage } from '../../context/LanguageContext'
 import { servicesData } from '../../data/servicesData'
 import { getAllRestaurants } from '../../data/db'
+import { getRestaurants } from '../../services/venuesService'
 import { PLAN_IDS } from '../../types/subscription'
 
 
@@ -81,9 +82,12 @@ const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const data = getAllRestaurants()
-    setRestaurants(data)
+    // Show the local list at once, then switch to the backend list when it answers
+    setRestaurants(getAllRestaurants())
     setLoading(false)
+    let cancelled = false
+    getRestaurants().then((list) => { if (!cancelled) setRestaurants(list) }).catch(() => {})
+    return () => { cancelled = true }
   }, [])
 
   if (!service) return null

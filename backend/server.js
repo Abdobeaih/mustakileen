@@ -26,6 +26,7 @@ const featureRoutes = require('./routes/featureRoutes')
 const analyticsRoutes = require('./routes/analyticsRoutes')
 const medicalCenterRoutes = require('./routes/medicalCenterRoutes')
 const bankRoutes = require('./routes/bankRoutes')
+const venueRoutes = require('./routes/venueRoutes')
 const serviceRequestRoutes = require('./routes/serviceRequestRoutes')
 
 connectDB()
@@ -103,6 +104,7 @@ app.use('/api/features', featureRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/medical-centers', medicalCenterRoutes)
 app.use('/api/banks', bankRoutes)
+app.use('/api', venueRoutes)
 app.use('/api/service-requests', serviceRequestRoutes)
 
 // Health check

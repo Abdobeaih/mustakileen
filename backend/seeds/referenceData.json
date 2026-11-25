@@ -1,0 +1,226 @@
+{
+  "restaurants": [
+    {
+      "legacy_id": "RST-001",
+      "name": "مطعم الذواق",
+      "governorate": "الجيزة",
+      "cuisine": "مأكولات شرقية",
+      "discount_percent": "25%",
+      "rating": 4.5,
+      "img_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&auto=format&fit=crop",
+      "description": "مطعم شرقي يقدم أشهى المأكولات العربية والمصرية مع خصم خاص لأعضاء مستقلين."
+    },
+    {
+      "legacy_id": "RST-002",
+      "name": "كافيه الروضة",
+      "governorate": "القاهرة",
+      "cuisine": "مشروبات وحلويات",
+      "discount_percent": "20%",
+      "rating": 4.3,
+      "img_url": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&auto=format&fit=crop",
+      "description": "كافيه هادئ بأجواء راقية في وسط القاهرة، مثالي للقاءات العمل والاسترخاء."
+    },
+    {
+      "legacy_id": "RST-003",
+      "name": "بيتزا نابولي",
+      "governorate": "الإسكندرية",
+      "cuisine": "بيتزا ومكرونة",
+      "discount_percent": "30%",
+      "rating": 4.6,
+      "img_url": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop",
+      "description": "أفضل بيتزا على الطريقة الإيطالية في الإسكندرية، عجينة طازجة ومكونات عالية الجودة."
+    },
+    {
+      "legacy_id": "RST-004",
+      "name": "مطعم كشري أبو طارق",
+      "governorate": "القاهرة",
+      "cuisine": "مأكولات مصرية",
+      "discount_percent": "15%",
+      "rating": 4.7,
+      "img_url": "https://images.unsplash.com/photo-1559847844-5315695dadae?w=400&auto=format&fit=crop",
+      "description": "أشهر مطعم كشري في مصر بطعم أصلي ووصفة سرية منذ أكثر من ٥٠ عاماً."
+    },
+    {
+      "legacy_id": "RST-005",
+      "name": "سوشي يامي",
+      "governorate": "القاهرة",
+      "cuisine": "سوشي وياباني",
+      "discount_percent": "20%",
+      "rating": 4.4,
+      "img_url": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&auto=format&fit=crop",
+      "description": "مطعم ياباني متخصص بالسوشي والمأكولات البحرية الطازجة بأجواء عصرية."
+    },
+    {
+      "legacy_id": "RST-006",
+      "name": "كافيه بون",
+      "governorate": "المنصورة",
+      "cuisine": "مشروبات ساخنة",
+      "discount_percent": "25%",
+      "rating": 4.2,
+      "img_url": "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=400&auto=format&fit=crop",
+      "description": "كافيه عصري يقدم تشكيلة واسعة من المشروبات الساخنة والباردة والحلويات اللذيذة."
+    },
+    {
+      "legacy_id": "RST-007",
+      "name": "مطعم السمكة",
+      "governorate": "الإسكندرية",
+      "cuisine": "مأكولات بحرية",
+      "discount_percent": "20%",
+      "rating": 4.8,
+      "img_url": "https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?w=400&auto=format&fit=crop",
+      "description": "أفضل مطعم مأكولات بحرية في الإسكندرية، أطباق طازجة يومياً من البحر مباشرة."
+    },
+    {
+      "legacy_id": "RST-008",
+      "name": "مطعم الشاورما الملكي",
+      "governorate": "الجيزة",
+      "cuisine": "سندويتشات ووجبات سريعة",
+      "discount_percent": "20%",
+      "rating": 4.1,
+      "img_url": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=400&auto=format&fit=crop",
+      "description": "أشهى شاورما لحم وفراخ في الجيزة بوصفات خاصة وخلطات توابل مميزة."
+    },
+    {
+      "legacy_id": "RST-009",
+      "name": "كافيه لافاندير",
+      "governorate": "القاهرة",
+      "cuisine": "حلويات ومشروبات",
+      "discount_percent": "15%",
+      "rating": 4,
+      "img_url": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&auto=format&fit=crop",
+      "description": "كافيه أنيق بتصميم عصري وديكور لافندر مميز، مناسب للتصوير وجلسات العمل."
+    },
+    {
+      "legacy_id": "RST-010",
+      "name": "مطعم ميدوزا",
+      "governorate": "القاهرة",
+      "cuisine": "مأكولات عالمية",
+      "discount_percent": "30%",
+      "rating": 4.5,
+      "img_url": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&auto=format&fit=crop",
+      "description": "مطعم عالمي يقدم بوفيه مفتوح يومي مع أطباق من مختلف المطابخ العالمية."
+    }
+  ],
+  "entertainmentVenues": [
+    {
+      "legacy_id": "ENT-001",
+      "name": "جيم جولدز الميراج",
+      "category": "gym",
+      "governorate": "القاهرة",
+      "discount_percent": "40%",
+      "rating": 4.7,
+      "img_url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&auto=format&fit=crop",
+      "description": "أكبر صالة جيم في القاهرة تضم أحدث الأجهزة الرياضية ومدربين معتمدين."
+    },
+    {
+      "legacy_id": "ENT-002",
+      "name": "فيزيكال سبورت",
+      "category": "gym",
+      "governorate": "الجيزة",
+      "discount_percent": "35%",
+      "rating": 4.5,
+      "img_url": "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&auto=format&fit=crop",
+      "description": "مركز لياقة بدنية متكامل مع حمام سباحة وساونا وجاكوزي."
+    },
+    {
+      "legacy_id": "ENT-003",
+      "name": "نادي وادي دجلة",
+      "category": "club",
+      "governorate": "القاهرة",
+      "discount_percent": "30%",
+      "rating": 4.6,
+      "img_url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&auto=format&fit=crop",
+      "description": "نادي اجتماعي ورياضي راقي يضم ملاعب ومطاعم ومنطقة أطفال."
+    },
+    {
+      "legacy_id": "ENT-004",
+      "name": "نادي الجزيرة الرياضي",
+      "category": "club",
+      "governorate": "الجيزة",
+      "discount_percent": "25%",
+      "rating": 4.4,
+      "img_url": "https://images.unsplash.com/photo-1570829460005-c840387bb1ca?w=400&auto=format&fit=crop",
+      "description": "نادي تاريخي على ضفاف النيل بأنشطة رياضية واجتماعية متنوعة."
+    },
+    {
+      "legacy_id": "ENT-005",
+      "name": "سينما فوكس مصر",
+      "category": "cinema",
+      "governorate": "القاهرة",
+      "discount_percent": "30%",
+      "rating": 4.6,
+      "img_url": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&auto=format&fit=crop",
+      "description": "أحدث دور السينما بتقنية 4DX وIMAX مع خصم خاص للأعضاء."
+    },
+    {
+      "legacy_id": "ENT-006",
+      "name": "سينما سيتي سنتر",
+      "category": "cinema",
+      "governorate": "الإسكندرية",
+      "discount_percent": "25%",
+      "rating": 4.3,
+      "img_url": "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=400&auto=format&fit=crop",
+      "description": "مجمع سينمائي متكامل بأحدث الأفلام العربية والعالمية."
+    },
+    {
+      "legacy_id": "ENT-007",
+      "name": "مول كايرو فيستيفال",
+      "category": "mall",
+      "governorate": "القاهرة",
+      "discount_percent": "20%",
+      "rating": 4.8,
+      "img_url": "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=400&auto=format&fit=crop",
+      "description": "أكبر مول في مصر يضم أشهر الماركات العالمية والمطاعم الفاخرة."
+    },
+    {
+      "legacy_id": "ENT-008",
+      "name": "مول سان ستيفانو",
+      "category": "mall",
+      "governorate": "الإسكندرية",
+      "discount_percent": "25%",
+      "rating": 4.5,
+      "img_url": "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=400&auto=format&fit=crop",
+      "description": "مول سياحي على شاطئ البحر يضم محلات تجارية وترفيهية."
+    },
+    {
+      "legacy_id": "ENT-009",
+      "name": "رحلة الأقصر وأسوان",
+      "category": "trip",
+      "governorate": "الأقصر",
+      "discount_percent": "25%",
+      "rating": 4.9,
+      "img_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=400&auto=format&fit=crop",
+      "description": "رحلة سياحية متكاملة لزيارة معابد الأقصر وأسوان مع مرشد سياحي."
+    },
+    {
+      "legacy_id": "ENT-010",
+      "name": "رحلة الغردقة",
+      "category": "trip",
+      "governorate": "الغردقة",
+      "discount_percent": "30%",
+      "rating": 4.7,
+      "img_url": "https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=400&auto=format&fit=crop",
+      "description": "رحلة استجمام على البحر الأحمر تشمل الغطس والأنشطة المائية."
+    },
+    {
+      "legacy_id": "ENT-011",
+      "name": "دريم بارك",
+      "category": "park",
+      "governorate": "القاهرة",
+      "discount_percent": "35%",
+      "rating": 4.3,
+      "img_url": "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=400&auto=format&fit=crop",
+      "description": "مدينة ملاهي ترفيهية كبرى تضم ألعاب مثيرة ومناطق مائية."
+    },
+    {
+      "legacy_id": "ENT-012",
+      "name": "فاميلي لاند",
+      "category": "park",
+      "governorate": "الإسكندرية",
+      "discount_percent": "40%",
+      "rating": 4.1,
+      "img_url": "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=400&auto=format&fit=crop",
+      "description": "منتزه عائلي كبير بالعين السخنة مناسب للأطفال والكبار."
+    }
+  ]
+}
