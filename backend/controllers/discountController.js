@@ -27,16 +27,27 @@ const createDiscount = async (req, res, next) => {
   } catch (error) { next(error) }
 }
 
+// Only an admin, or the company that owns the discount, may change or delete it.
+const canManage = (req, discount) =>
+  req.entityType === 'admin' || (req.entityType === 'company' && String(discount.company_id) === String(req.entityId))
+
 const updateDiscount = async (req, res, next) => {
   try {
-    const discount = await Discount.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
-    if (!discount) { res.status(404); throw new Error('Discount not found') }
+    const existing = await Discount.findById(req.params.id)
+    if (!existing) { res.status(404); throw new Error('Discount not found') }
+    if (!canManage(req, existing)) { res.status(403); throw new Error('Not allowed to change this discount') }
+    const { company_id, uses, views, status, approved_at, ...changes } = req.body
+    if (req.entityType === 'admin' && status) changes.status = status
+    const discount = await Discount.findByIdAndUpdate(req.params.id, changes, { new: true, runValidators: true })
     res.json({ success: true, data: discount })
   } catch (error) { next(error) }
 }
 
 const deleteDiscount = async (req, res, next) => {
   try {
+    const existing = await Discount.findById(req.params.id)
+    if (!existing) { res.status(404); throw new Error('Discount not found') }
+    if (!canManage(req, existing)) { res.status(403); throw new Error('Not allowed to delete this discount') }
     await Discount.findByIdAndDelete(req.params.id)
     res.json({ success: true, message: 'Discount deleted' })
   } catch (error) { next(error) }

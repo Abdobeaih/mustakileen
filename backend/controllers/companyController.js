@@ -5,7 +5,7 @@ const APIFeatures = require('../utils/apiFeatures')
 
 const getCompanies = async (req, res, next) => {
   try {
-    const features = new APIFeatures(Company.find().lean(), req.query).filter().search(['name', 'email']).sort().paginate()
+    const features = new APIFeatures(Company.find().select('-password').lean(), req.query).filter().search(['name', 'email']).sort().paginate()
     const companies = await features.query
     const pagination = await features.count()
     res.json({ success: true, data: companies, ...pagination })
@@ -23,13 +23,18 @@ const getCompany = async (req, res, next) => {
 const createCompany = async (req, res, next) => {
   try {
     const company = await Company.create(req.body)
-    res.status(201).json({ success: true, data: company })
+    res.status(201).json({ success: true, data: { ...company.toObject(), password: undefined } })
   } catch (error) { next(error) }
 }
 
+// Only an admin, or the company itself, may change a company. The password is never changed here.
 const updateCompany = async (req, res, next) => {
   try {
-    const company = await Company.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password')
+    const isOwner = req.entityType === 'company' && String(req.entityId) === String(req.params.id)
+    if (req.entityType !== 'admin' && !isOwner) { res.status(403); throw new Error('Not allowed to change this company') }
+    const { password, status, approved_at, ...changes } = req.body
+    if (req.entityType === 'admin' && status) changes.status = status
+    const company = await Company.findByIdAndUpdate(req.params.id, changes, { new: true, runValidators: true }).select('-password')
     if (!company) { res.status(404); throw new Error('Company not found') }
     res.json({ success: true, data: company })
   } catch (error) { next(error) }
@@ -44,7 +49,7 @@ const deleteCompany = async (req, res, next) => {
 
 const approveCompany = async (req, res, next) => {
   try {
-    const company = await Company.findByIdAndUpdate(req.params.id, { status: 'approved', approved_at: new Date() }, { new: true })
+    const company = await Company.findByIdAndUpdate(req.params.id, { status: 'approved', approved_at: new Date() }, { new: true }).select('-password')
     if (!company) { res.status(404); throw new Error('Company not found') }
     res.json({ success: true, data: company })
   } catch (error) { next(error) }
@@ -52,7 +57,7 @@ const approveCompany = async (req, res, next) => {
 
 const rejectCompany = async (req, res, next) => {
   try {
-    const company = await Company.findByIdAndUpdate(req.params.id, { status: 'rejected' }, { new: true })
+    const company = await Company.findByIdAndUpdate(req.params.id, { status: 'rejected' }, { new: true }).select('-password')
     if (!company) { res.status(404); throw new Error('Company not found') }
     res.json({ success: true, data: company })
   } catch (error) { next(error) }
