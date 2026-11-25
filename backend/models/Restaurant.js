@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const restaurantSchema = new mongoose.Schema({
+  legacy_id: String,
   name: String,
   governorate: String,
   address: String,
