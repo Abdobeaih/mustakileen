@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const entSchema = new mongoose.Schema({
+  legacy_id: String,
   name: String,
   governorate: String,
   address: String,
