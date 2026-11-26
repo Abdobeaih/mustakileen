@@ -16,16 +16,18 @@ const getMyInstallments = async (req, res, next) => {
 
 const createInstallment = async (req, res, next) => {
   try {
-    const installment = await Installment.create({ ...req.body, user_id: req.entityId })
+    const { paid, status, ...rest } = req.body
+    const installment = await Installment.create({ ...rest, user_id: req.entityId })
     res.status(201).json({ success: true, data: installment })
   } catch (error) { next(error) }
 }
 
 const payInstallment = async (req, res, next) => {
   try {
-    const installment = await Installment.findById(req.params.id)
+    const installment = await Installment.findOne({ _id: req.params.id, user_id: req.entityId })
     if (!installment) { res.status(404); throw new Error('Installment not found') }
-    const amount = req.body.amount || installment.monthly_amount
+    const amount = req.body.amount === undefined ? installment.monthly_amount : Number(req.body.amount)
+    if (!Number.isFinite(amount) || amount <= 0) { res.status(400); throw new Error('Invalid amount') }
     installment.paid += amount
     if (installment.paid >= installment.total) installment.status = 'completed'
     await installment.save()
