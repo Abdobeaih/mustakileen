@@ -7,49 +7,18 @@ const Enrollment = require('../models/Enrollment')
 
 const getDashboardStats = async (req, res, next) => {
   try {
-    const stats = await User.aggregate([
-      {
-        $facet: {
-          users: [{ $count: 'count' }],
-        },
-      },
-    ]).then(async () => {
-      const companies = await Company.aggregate([
-        {
-          $facet: {
-            total: [{ $count: 'count' }],
-            pending: [{ $match: { status: 'pending' } }, { $count: 'count' }],
-            approved: [{ $match: { status: 'approved' } }, { $count: 'count' }],
-          },
-        },
-      ])
-
-      const discounts = await Discount.aggregate([
-        {
-          $facet: {
-            total: [{ $count: 'count' }],
-            pending: [{ $match: { status: 'pending' } }, { $count: 'count' }],
-            approved: [{ $match: { status: 'approved' } }, { $count: 'count' }],
-          },
-        },
-      ])
-
-      const scans = await UserScan.countDocuments()
-      const revenue = await Payment.aggregate([{ $match: { status: 'SUCCESS' } }, { $group: { _id: null, total: { $sum: '$amount' } } }])
-
-      return {
-        totalUsers: stats[0]?.users[0]?.count || 0,
-        totalCompanies: companies[0]?.total[0]?.count || 0,
-        pendingCompanies: companies[0]?.pending[0]?.count || 0,
-        totalDiscounts: discounts[0]?.total[0]?.count || 0,
-        pendingDiscounts: discounts[0]?.pending[0]?.count || 0,
-        approvedDiscounts: discounts[0]?.approved[0]?.count || 0,
-        totalScans: scans,
-        totalRevenue: revenue[0]?.total || 0,
-      }
-    })
-
-    res.json({ success: true, data: stats })
+    const [totalUsers, totalCompanies, pendingCompanies, totalDiscounts, pendingDiscounts, approvedDiscounts, totalScans, revenue] = await Promise.all([
+      User.countDocuments(),
+      Company.countDocuments(),
+      Company.countDocuments({ status: 'pending' }),
+      Discount.countDocuments(),
+      Discount.countDocuments({ status: 'pending' }),
+      Discount.countDocuments({ status: 'approved' }),
+      UserScan.countDocuments(),
+      Payment.aggregate([{ $match: { status: 'SUCCESS' } }, { $group: { _id: null, total: { $sum: '$amount' } } }]),
+    ])
+    const data = { totalUsers, totalCompanies, pendingCompanies, totalDiscounts, pendingDiscounts, approvedDiscounts, totalScans, totalRevenue: revenue[0]?.total || 0 }
+    res.json({ success: true, data })
   } catch (error) { next(error) }
 }
 
@@ -67,6 +36,7 @@ const getRevenueDetails = async (req, res, next) => {
 const getCompanyAnalytics = async (req, res, next) => {
   try {
     const companyId = req.params.companyId || req.entityId
+    if (req.entityType !== 'admin' && String(companyId) !== String(req.entityId)) { res.status(403); throw new Error('Not allowed') }
     const discounts = await Discount.find({ company_id: companyId })
     const discountIds = discounts.map(d => d._id)
     const totalViews = discounts.reduce((sum, d) => sum + (d.views || 0), 0)
@@ -78,6 +48,11 @@ const getCompanyAnalytics = async (req, res, next) => {
 
 const getDiscountUsageDetail = async (req, res, next) => {
   try {
+    if (req.entityType !== 'admin') {
+      const d = await Discount.findById(req.params.id).lean()
+      if (!d) { res.status(404); throw new Error('Discount not found') }
+      if (req.entityType !== 'company' || String(d.company_id) !== String(req.entityId)) { res.status(403); throw new Error('Not allowed') }
+    }
     const scans = await UserScan.find({ discount_id: req.params.id }).populate('user_id', 'name email').sort('-scanned_at')
     res.json({ success: true, data: scans })
   } catch (error) { next(error) }
