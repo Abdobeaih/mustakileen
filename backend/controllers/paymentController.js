@@ -14,13 +14,14 @@ const getPayment = async (req, res, next) => {
   try {
     const payment = await Payment.findById(req.params.id).populate('user_id', 'name email').lean()
     if (!payment) { res.status(404); throw new Error('Payment not found') }
+    if (req.entityType !== 'admin' && String(payment.user_id?._id) !== String(req.entityId)) { res.status(403); throw new Error('Not allowed') }
     res.json({ success: true, data: payment })
   } catch (error) { next(error) }
 }
 
 const createPayment = async (req, res, next) => {
   try {
-    const payment = await Payment.create({ ...req.body, user_id: req.entityId, transaction_id: 'TXN' + Date.now() })
+    const payment = await Payment.create({ ...req.body, user_id: req.entityId, transaction_id: 'TXN' + Date.now(), status: 'PENDING' })
     res.status(201).json({ success: true, data: payment })
   } catch (error) { next(error) }
 }

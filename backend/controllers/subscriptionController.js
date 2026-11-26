@@ -49,8 +49,11 @@ const createSubscription = async (req, res, next) => {
 
 const cancelSubscription = async (req, res, next) => {
   try {
-    const sub = await UserSubscription.findByIdAndUpdate(req.params.id, { status: 'CANCELLED' }, { new: true })
-    if (!sub) { res.status(404); throw new Error('Subscription not found') }
+    const found = await UserSubscription.findById(req.params.id)
+    if (!found) { res.status(404); throw new Error('Subscription not found') }
+    if (req.entityType !== 'admin' && String(found.userId) !== String(req.entityId)) { res.status(403); throw new Error('Not allowed') }
+    found.status = 'CANCELLED'
+    const sub = await found.save()
     res.json({ success: true, data: sub })
   } catch (error) { next(error) }
 }

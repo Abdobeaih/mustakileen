@@ -23,13 +23,17 @@ const createReview = async (req, res, next) => {
 
 const deleteReview = async (req, res, next) => {
   try {
-    await Review.findByIdAndDelete(req.params.id)
+    const review = await Review.findById(req.params.id)
+    if (!review) { res.status(404); throw new Error('Review not found') }
+    if (req.entityType !== 'admin' && String(review.user_id) !== String(req.entityId)) { res.status(403); throw new Error('Not allowed') }
+    await review.deleteOne()
     res.json({ success: true, message: 'Review deleted' })
   } catch (error) { next(error) }
 }
 
 const getAllReviews = async (req, res, next) => {
   try {
+    if (req.entityType !== 'admin') { res.status(403); throw new Error('Admin access only') }
     const reviews = await Review.find().populate('user_id', 'name').populate('discount_id', 'name').sort('-createdAt')
     res.json({ success: true, data: reviews })
   } catch (error) { next(error) }
@@ -52,7 +56,10 @@ const createSocialReview = async (req, res, next) => {
 
 const deleteSocialReview = async (req, res, next) => {
   try {
-    await SocialReview.findByIdAndDelete(req.params.id)
+    const review = await SocialReview.findById(req.params.id)
+    if (!review) { res.status(404); throw new Error('Review not found') }
+    if (req.entityType !== 'admin' && String(review.user_id) !== String(req.entityId)) { res.status(403); throw new Error('Not allowed') }
+    await review.deleteOne()
     res.json({ success: true, message: 'Review deleted' })
   } catch (error) { next(error) }
 }
