@@ -3,7 +3,7 @@ const APIFeatures = require('../utils/apiFeatures')
 
 const getUsers = async (req, res, next) => {
   try {
-    const features = new APIFeatures(User.find().lean(), req.query).filter().search(['name', 'email', 'phone']).sort().paginate()
+    const features = new APIFeatures(User.find().select('-password').lean(), req.query).filter().search(['name', 'email', 'phone']).sort().paginate()
     const users = await features.query
     const pagination = await features.count()
     res.json({ success: true, data: users, ...pagination })
@@ -12,6 +12,7 @@ const getUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
+    if (req.entityType !== 'admin' && String(req.entityId) !== String(req.params.id)) { res.status(403); throw new Error('Not allowed') }
     const user = await User.findById(req.params.id).select('-password').lean()
     if (!user) { res.status(404); throw new Error('User not found') }
     res.json({ success: true, data: user })
@@ -21,13 +22,22 @@ const getUser = async (req, res, next) => {
 const createUser = async (req, res, next) => {
   try {
     const user = await User.create(req.body)
-    res.status(201).json({ success: true, data: user })
+    const data = user.toObject()
+    delete data.password
+    res.status(201).json({ success: true, data })
   } catch (error) { next(error) }
 }
 
+const SELF_LOCKED = ['password', 'role', 'plan', 'isActive', 'scans', 'saved', 'points']
+
 const updateUser = async (req, res, next) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password')
+    const isAdmin = req.entityType === 'admin'
+    if (!isAdmin && String(req.entityId) !== String(req.params.id)) { res.status(403); throw new Error('Not allowed') }
+    const body = { ...req.body }
+    delete body.password
+    if (!isAdmin) SELF_LOCKED.forEach((k) => delete body[k])
+    const user = await User.findByIdAndUpdate(req.params.id, body, { new: true, runValidators: true }).select('-password')
     if (!user) { res.status(404); throw new Error('User not found') }
     res.json({ success: true, data: user })
   } catch (error) { next(error) }
